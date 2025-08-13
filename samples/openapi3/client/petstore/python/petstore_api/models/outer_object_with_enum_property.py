@@ -72,17 +72,12 @@ class OuterObjectWithEnumProperty(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if str_value (nullable) is None
-        # and model_fields_set contains the field
-        if self.str_value is None and "str_value" in self.model_fields_set:
-            _dict['str_value'] = None
 
         return _dict
 
@@ -95,10 +90,7 @@ class OuterObjectWithEnumProperty(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "str_value": obj.get("str_value"),
-            "value": obj.get("value")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

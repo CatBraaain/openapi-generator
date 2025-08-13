@@ -68,11 +68,8 @@ class Task(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of activity
-        if self.activity:
-            _dict['activity'] = self.activity.to_dict()
         return _dict
 
     @classmethod
@@ -84,10 +81,7 @@ class Task(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "activity": TaskActivity.from_dict(obj["activity"]) if obj.get("activity") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

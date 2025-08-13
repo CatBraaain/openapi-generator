@@ -67,15 +67,8 @@ class SecondCircularAllOfRef(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in circular_all_of_ref (list)
-        _items = []
-        if self.circular_all_of_ref:
-            for _item_circular_all_of_ref in self.circular_all_of_ref:
-                if _item_circular_all_of_ref:
-                    _items.append(_item_circular_all_of_ref.to_dict())
-            _dict['circularAllOfRef'] = _items
         return _dict
 
     @classmethod
@@ -87,10 +80,7 @@ class SecondCircularAllOfRef(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "_name": obj.get("_name"),
-            "circularAllOfRef": [CircularAllOfRef.from_dict(_item) for _item in obj["circularAllOfRef"]] if obj.get("circularAllOfRef") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 from petstore_api.models.circular_all_of_ref import CircularAllOfRef

@@ -82,11 +82,8 @@ class SpecialName(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of var_async
-        if self.var_async:
-            _dict['async'] = self.var_async.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -103,11 +100,7 @@ class SpecialName(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "property": obj.get("property"),
-            "async": Category.from_dict(obj["async"]) if obj.get("async") is not None else None,
-            "schema": obj.get("schema")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

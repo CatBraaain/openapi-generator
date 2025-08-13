@@ -128,7 +128,7 @@ class FormatTest(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
@@ -146,25 +146,7 @@ class FormatTest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "integer": obj.get("integer"),
-            "int32": obj.get("int32"),
-            "int64": obj.get("int64"),
-            "number": obj.get("number"),
-            "float": obj.get("float"),
-            "double": obj.get("double"),
-            "decimal": obj.get("decimal"),
-            "string": obj.get("string"),
-            "string_with_double_quote_pattern": obj.get("string_with_double_quote_pattern"),
-            "byte": obj.get("byte"),
-            "binary": obj.get("binary"),
-            "date": obj.get("date"),
-            "dateTime": obj.get("dateTime"),
-            "uuid": obj.get("uuid"),
-            "password": obj.get("password"),
-            "pattern_with_digits": obj.get("pattern_with_digits"),
-            "pattern_with_digits_and_delimiter": obj.get("pattern_with_digits_and_delimiter")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

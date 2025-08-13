@@ -70,15 +70,8 @@ class CircularAllOfRef(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in second_circular_all_of_ref (list)
-        _items = []
-        if self.second_circular_all_of_ref:
-            for _item_second_circular_all_of_ref in self.second_circular_all_of_ref:
-                if _item_second_circular_all_of_ref:
-                    _items.append(_item_second_circular_all_of_ref.to_dict())
-            _dict['secondCircularAllOfRef'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -95,10 +88,7 @@ class CircularAllOfRef(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "_name": obj.get("_name"),
-            "secondCircularAllOfRef": [SecondCircularAllOfRef.from_dict(_item) for _item in obj["secondCircularAllOfRef"]] if obj.get("secondCircularAllOfRef") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

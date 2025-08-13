@@ -85,7 +85,7 @@ class TestModelWithEnumDefault(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
@@ -103,13 +103,7 @@ class TestModelWithEnumDefault(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "test_enum": obj.get("test_enum"),
-            "test_string": obj.get("test_string"),
-            "test_enum_with_default": obj.get("test_enum_with_default") if obj.get("test_enum_with_default") is not None else TestEnumWithDefault.ZWEI,
-            "test_string_with_default": obj.get("test_string_with_default") if obj.get("test_string_with_default") is not None else 'ahoy matey',
-            "test_inline_defined_enum_with_default": obj.get("test_inline_defined_enum_with_default") if obj.get("test_inline_defined_enum_with_default") is not None else 'B'
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

@@ -67,7 +67,7 @@ class TestFormObjectMultipartRequestMarker(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -80,9 +80,7 @@ class TestFormObjectMultipartRequestMarker(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "name": obj.get("name")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

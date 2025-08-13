@@ -74,7 +74,7 @@ class Capitalization(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
@@ -92,14 +92,7 @@ class Capitalization(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "smallCamel": obj.get("smallCamel"),
-            "CapitalCamel": obj.get("CapitalCamel"),
-            "small_Snake": obj.get("small_Snake"),
-            "Capital_Snake": obj.get("Capital_Snake"),
-            "SCA_ETH_Flow_Points": obj.get("SCA_ETH_Flow_Points"),
-            "ATT_NAME": obj.get("ATT_NAME")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

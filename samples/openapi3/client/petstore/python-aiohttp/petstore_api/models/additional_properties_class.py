@@ -67,7 +67,7 @@ class AdditionalPropertiesClass(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -80,10 +80,7 @@ class AdditionalPropertiesClass(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "map_property": obj.get("map_property"),
-            "map_of_map_property": obj.get("map_of_map_property")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

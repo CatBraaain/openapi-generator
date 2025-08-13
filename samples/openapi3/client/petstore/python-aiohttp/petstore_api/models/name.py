@@ -73,7 +73,7 @@ class Name(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -86,12 +86,7 @@ class Name(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "snake_case": obj.get("snake_case"),
-            "property": obj.get("property"),
-            "123Number": obj.get("123Number")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

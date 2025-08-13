@@ -82,7 +82,7 @@ class Feeding(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -95,11 +95,7 @@ class Feeding(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "task_name": obj.get("task_name"),
-            "function_name": obj.get("function_name"),
-            "content": obj.get("content")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

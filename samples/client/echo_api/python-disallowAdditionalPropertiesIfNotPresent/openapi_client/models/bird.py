@@ -68,7 +68,7 @@ class Bird(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -86,10 +86,7 @@ class Bird(BaseModel):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in Bird) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "size": obj.get("size"),
-            "color": obj.get("color")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

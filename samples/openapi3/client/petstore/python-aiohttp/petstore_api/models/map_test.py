@@ -80,7 +80,7 @@ class MapTest(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -93,12 +93,7 @@ class MapTest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "map_map_of_string": obj.get("map_map_of_string"),
-            "map_of_enum_string": obj.get("map_of_enum_string"),
-            "direct_map": obj.get("direct_map"),
-            "indirect_map": obj.get("indirect_map")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

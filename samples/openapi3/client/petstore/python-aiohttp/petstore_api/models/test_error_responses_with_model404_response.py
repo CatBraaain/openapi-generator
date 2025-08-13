@@ -66,7 +66,7 @@ class TestErrorResponsesWithModel404Response(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -79,9 +79,7 @@ class TestErrorResponsesWithModel404Response(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "reason404": obj.get("reason404")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

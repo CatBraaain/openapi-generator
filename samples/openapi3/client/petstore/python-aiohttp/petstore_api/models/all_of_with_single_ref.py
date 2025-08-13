@@ -68,7 +68,7 @@ class AllOfWithSingleRef(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -81,10 +81,7 @@ class AllOfWithSingleRef(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "username": obj.get("username"),
-            "SingleRefType": obj.get("SingleRefType")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

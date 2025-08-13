@@ -71,7 +71,7 @@ class DataQuery(Query):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -89,13 +89,7 @@ class DataQuery(Query):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in DataQuery) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "outcomes": obj.get("outcomes"),
-            "suffix": obj.get("suffix"),
-            "text": obj.get("text"),
-            "date": obj.get("date")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

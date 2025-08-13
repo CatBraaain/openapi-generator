@@ -86,23 +86,8 @@ class DefaultValue(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # set to None if array_string_nullable (nullable) is None
-        # and model_fields_set contains the field
-        if self.array_string_nullable is None and "array_string_nullable" in self.model_fields_set:
-            _dict['array_string_nullable'] = None
-
-        # set to None if array_string_extension_nullable (nullable) is None
-        # and model_fields_set contains the field
-        if self.array_string_extension_nullable is None and "array_string_extension_nullable" in self.model_fields_set:
-            _dict['array_string_extension_nullable'] = None
-
-        # set to None if string_nullable (nullable) is None
-        # and model_fields_set contains the field
-        if self.string_nullable is None and "string_nullable" in self.model_fields_set:
-            _dict['string_nullable'] = None
-
         return _dict
 
     @classmethod
@@ -119,16 +104,7 @@ class DefaultValue(BaseModel):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in DefaultValue) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "array_string_enum_ref_default": obj.get("array_string_enum_ref_default"),
-            "array_string_enum_default": obj.get("array_string_enum_default"),
-            "array_string_default": obj.get("array_string_default"),
-            "array_integer_default": obj.get("array_integer_default"),
-            "array_string": obj.get("array_string"),
-            "array_string_nullable": obj.get("array_string_nullable"),
-            "array_string_extension_nullable": obj.get("array_string_extension_nullable"),
-            "string_nullable": obj.get("string_nullable")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

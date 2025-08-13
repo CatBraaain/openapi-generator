@@ -67,11 +67,8 @@ class FirstRef(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of self_ref
-        if self.self_ref:
-            _dict['self_ref'] = self.self_ref.to_dict()
         return _dict
 
     @classmethod
@@ -83,10 +80,7 @@ class FirstRef(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "category": obj.get("category"),
-            "self_ref": SecondRef.from_dict(obj["self_ref"]) if obj.get("self_ref") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 from petstore_api.models.second_ref import SecondRef

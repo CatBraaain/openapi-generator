@@ -68,11 +68,8 @@ class HuntingDog(Creature):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of info
-        if self.info:
-            _dict['info'] = self.info.to_dict()
         return _dict
 
     @classmethod
@@ -84,11 +81,7 @@ class HuntingDog(Creature):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "info": CreatureInfo.from_dict(obj["info"]) if obj.get("info") is not None else None,
-            "type": obj.get("type"),
-            "isTrained": obj.get("isTrained")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

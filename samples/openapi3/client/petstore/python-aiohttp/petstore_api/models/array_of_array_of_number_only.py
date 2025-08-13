@@ -66,7 +66,7 @@ class ArrayOfArrayOfNumberOnly(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -79,9 +79,7 @@ class ArrayOfArrayOfNumberOnly(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "ArrayArrayNumber": obj.get("ArrayArrayNumber")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

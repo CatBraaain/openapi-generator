@@ -76,7 +76,7 @@ class User(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
@@ -94,16 +94,7 @@ class User(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "username": obj.get("username"),
-            "firstName": obj.get("firstName"),
-            "lastName": obj.get("lastName"),
-            "email": obj.get("email"),
-            "password": obj.get("password"),
-            "phone": obj.get("phone"),
-            "userStatus": obj.get("userStatus")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

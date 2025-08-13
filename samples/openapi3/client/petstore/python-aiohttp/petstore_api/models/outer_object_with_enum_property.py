@@ -69,13 +69,8 @@ class OuterObjectWithEnumProperty(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # set to None if str_value (nullable) is None
-        # and model_fields_set contains the field
-        if self.str_value is None and "str_value" in self.model_fields_set:
-            _dict['str_value'] = None
-
         return _dict
 
     @classmethod
@@ -87,10 +82,7 @@ class OuterObjectWithEnumProperty(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "str_value": obj.get("str_value"),
-            "value": obj.get("value")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

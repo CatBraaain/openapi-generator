@@ -70,7 +70,7 @@ class TestQueryStyleDeepObjectExplodeTrueObjectAllOfQueryObjectParameter(BaseMod
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -83,12 +83,7 @@ class TestQueryStyleDeepObjectExplodeTrueObjectAllOfQueryObjectParameter(BaseMod
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "size": obj.get("size"),
-            "color": obj.get("color"),
-            "id": obj.get("id"),
-            "name": obj.get("name")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

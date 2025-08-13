@@ -67,7 +67,7 @@ class Dog(Animal):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -80,11 +80,7 @@ class Dog(Animal):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "className": obj.get("className"),
-            "color": obj.get("color") if obj.get("color") is not None else 'red',
-            "breed": obj.get("breed")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

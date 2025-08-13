@@ -88,7 +88,7 @@ class EnumArrays(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -101,10 +101,7 @@ class EnumArrays(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "just_symbol": obj.get("just_symbol"),
-            "array_enum": obj.get("array_enum")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

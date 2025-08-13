@@ -67,17 +67,8 @@ class UnnamedDictWithAdditionalModelListProperties(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each value in dict_property (dict of array)
-        _field_dict_of_array = {}
-        if self.dict_property:
-            for _key_dict_property in self.dict_property:
-                if self.dict_property[_key_dict_property] is not None:
-                    _field_dict_of_array[_key_dict_property] = [
-                        _item.to_dict() for _item in self.dict_property[_key_dict_property]
-                    ]
-            _dict['dictProperty'] = _field_dict_of_array
         return _dict
 
     @classmethod
@@ -89,16 +80,7 @@ class UnnamedDictWithAdditionalModelListProperties(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "dictProperty": dict(
-                (_k,
-                        [CreatureInfo.from_dict(_item) for _item in _v]
-                        if _v is not None
-                        else None
-                )
-                for _k, _v in obj.get("dictProperty", {}).items()
-            )
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

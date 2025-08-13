@@ -67,11 +67,8 @@ class SecondRef(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of circular_ref
-        if self.circular_ref:
-            _dict['circular_ref'] = self.circular_ref.to_dict()
         return _dict
 
     @classmethod
@@ -83,10 +80,7 @@ class SecondRef(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "category": obj.get("category"),
-            "circular_ref": CircularReferenceModel.from_dict(obj["circular_ref"]) if obj.get("circular_ref") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 from petstore_api.models.circular_reference_model import CircularReferenceModel

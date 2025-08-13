@@ -66,7 +66,7 @@ class ListClass(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -79,9 +79,7 @@ class ListClass(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "123-list": obj.get("123-list")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

@@ -71,17 +71,8 @@ class ArrayTest(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in array_array_of_model (list of list)
-        _items = []
-        if self.array_array_of_model:
-            for _item_array_array_of_model in self.array_array_of_model:
-                if _item_array_array_of_model:
-                    _items.append(
-                         [_inner_item.to_dict() for _inner_item in _item_array_array_of_model if _inner_item is not None]
-                    )
-            _dict['array_array_of_model'] = _items
         return _dict
 
     @classmethod
@@ -93,15 +84,7 @@ class ArrayTest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "array_of_string": obj.get("array_of_string"),
-            "array_of_nullable_float": obj.get("array_of_nullable_float"),
-            "array_array_of_integer": obj.get("array_array_of_integer"),
-            "array_array_of_model": [
-                    [ReadOnlyFirst.from_dict(_inner_item) for _inner_item in _item]
-                    for _item in obj["array_array_of_model"]
-                ] if obj.get("array_array_of_model") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

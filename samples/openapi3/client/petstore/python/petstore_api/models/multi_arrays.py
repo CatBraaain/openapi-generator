@@ -72,22 +72,8 @@ class MultiArrays(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in tags (list)
-        _items = []
-        if self.tags:
-            for _item_tags in self.tags:
-                if _item_tags:
-                    _items.append(_item_tags.to_dict())
-            _dict['tags'] = _items
-        # override the default output from pydantic by calling `to_dict()` of each item in files (list)
-        _items = []
-        if self.files:
-            for _item_files in self.files:
-                if _item_files:
-                    _items.append(_item_files.to_dict())
-            _dict['files'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -104,10 +90,7 @@ class MultiArrays(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "tags": [Tag.from_dict(_item) for _item in obj["tags"]] if obj.get("tags") is not None else None,
-            "files": [File.from_dict(_item) for _item in obj["files"]] if obj.get("files") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

@@ -70,15 +70,8 @@ class InputAllOf(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each value in some_data (dict)
-        _field_dict = {}
-        if self.some_data:
-            for _key_some_data in self.some_data:
-                if self.some_data[_key_some_data]:
-                    _field_dict[_key_some_data] = self.some_data[_key_some_data].to_dict()
-            _dict['some_data'] = _field_dict
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -95,14 +88,7 @@ class InputAllOf(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "some_data": dict(
-                (_k, Tag.from_dict(_v))
-                for _k, _v in obj["some_data"].items()
-            )
-            if obj.get("some_data") is not None
-            else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

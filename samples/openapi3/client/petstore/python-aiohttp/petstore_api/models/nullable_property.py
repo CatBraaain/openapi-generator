@@ -78,13 +78,8 @@ class NullableProperty(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # set to None if name (nullable) is None
-        # and model_fields_set contains the field
-        if self.name is None and "name" in self.model_fields_set:
-            _dict['name'] = None
-
         return _dict
 
     @classmethod
@@ -96,10 +91,7 @@ class NullableProperty(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

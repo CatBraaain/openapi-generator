@@ -67,7 +67,7 @@ class Category(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -80,10 +80,7 @@ class Category(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name") if obj.get("name") is not None else 'default-name'
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

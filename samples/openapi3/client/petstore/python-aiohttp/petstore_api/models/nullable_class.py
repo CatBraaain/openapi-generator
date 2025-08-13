@@ -82,67 +82,12 @@ class NullableClass(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if required_integer_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.required_integer_prop is None and "required_integer_prop" in self.model_fields_set:
-            _dict['required_integer_prop'] = None
-
-        # set to None if integer_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.integer_prop is None and "integer_prop" in self.model_fields_set:
-            _dict['integer_prop'] = None
-
-        # set to None if number_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.number_prop is None and "number_prop" in self.model_fields_set:
-            _dict['number_prop'] = None
-
-        # set to None if boolean_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.boolean_prop is None and "boolean_prop" in self.model_fields_set:
-            _dict['boolean_prop'] = None
-
-        # set to None if string_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.string_prop is None and "string_prop" in self.model_fields_set:
-            _dict['string_prop'] = None
-
-        # set to None if date_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.date_prop is None and "date_prop" in self.model_fields_set:
-            _dict['date_prop'] = None
-
-        # set to None if datetime_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.datetime_prop is None and "datetime_prop" in self.model_fields_set:
-            _dict['datetime_prop'] = None
-
-        # set to None if array_nullable_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.array_nullable_prop is None and "array_nullable_prop" in self.model_fields_set:
-            _dict['array_nullable_prop'] = None
-
-        # set to None if array_and_items_nullable_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.array_and_items_nullable_prop is None and "array_and_items_nullable_prop" in self.model_fields_set:
-            _dict['array_and_items_nullable_prop'] = None
-
-        # set to None if object_nullable_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.object_nullable_prop is None and "object_nullable_prop" in self.model_fields_set:
-            _dict['object_nullable_prop'] = None
-
-        # set to None if object_and_items_nullable_prop (nullable) is None
-        # and model_fields_set contains the field
-        if self.object_and_items_nullable_prop is None and "object_and_items_nullable_prop" in self.model_fields_set:
-            _dict['object_and_items_nullable_prop'] = None
 
         return _dict
 
@@ -155,21 +100,7 @@ class NullableClass(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "required_integer_prop": obj.get("required_integer_prop"),
-            "integer_prop": obj.get("integer_prop"),
-            "number_prop": obj.get("number_prop"),
-            "boolean_prop": obj.get("boolean_prop"),
-            "string_prop": obj.get("string_prop"),
-            "date_prop": obj.get("date_prop"),
-            "datetime_prop": obj.get("datetime_prop"),
-            "array_nullable_prop": obj.get("array_nullable_prop"),
-            "array_and_items_nullable_prop": obj.get("array_and_items_nullable_prop"),
-            "array_items_nullable": obj.get("array_items_nullable"),
-            "object_nullable_prop": obj.get("object_nullable_prop"),
-            "object_and_items_nullable_prop": obj.get("object_and_items_nullable_prop"),
-            "object_items_nullable": obj.get("object_items_nullable")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

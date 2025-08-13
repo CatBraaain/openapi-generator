@@ -68,7 +68,7 @@ class OuterComposite(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -81,11 +81,7 @@ class OuterComposite(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "my_number": obj.get("my_number"),
-            "my_string": obj.get("my_string"),
-            "my_boolean": obj.get("my_boolean")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

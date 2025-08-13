@@ -70,7 +70,7 @@ class NumberPropertiesOnly(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -83,11 +83,7 @@ class NumberPropertiesOnly(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "number": obj.get("number"),
-            "float": obj.get("float"),
-            "double": obj.get("double")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

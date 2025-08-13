@@ -70,15 +70,8 @@ class MixedPropertiesAndAdditionalPropertiesClass(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each value in map (dict)
-        _field_dict = {}
-        if self.map:
-            for _key_map in self.map:
-                if self.map[_key_map]:
-                    _field_dict[_key_map] = self.map[_key_map].to_dict()
-            _dict['map'] = _field_dict
         return _dict
 
     @classmethod
@@ -90,16 +83,7 @@ class MixedPropertiesAndAdditionalPropertiesClass(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "uuid": obj.get("uuid"),
-            "dateTime": obj.get("dateTime"),
-            "map": dict(
-                (_k, Animal.from_dict(_v))
-                for _k, _v in obj["map"].items()
-            )
-            if obj.get("map") is not None
-            else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

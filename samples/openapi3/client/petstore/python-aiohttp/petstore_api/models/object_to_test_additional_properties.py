@@ -66,7 +66,7 @@ class ObjectToTestAdditionalProperties(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -79,9 +79,7 @@ class ObjectToTestAdditionalProperties(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "property": obj.get("property") if obj.get("property") is not None else False
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

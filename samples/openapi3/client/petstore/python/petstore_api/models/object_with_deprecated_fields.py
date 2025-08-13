@@ -73,11 +73,8 @@ class ObjectWithDeprecatedFields(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of deprecated_ref
-        if self.deprecated_ref:
-            _dict['deprecatedRef'] = self.deprecated_ref.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -94,12 +91,7 @@ class ObjectWithDeprecatedFields(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "uuid": obj.get("uuid"),
-            "id": obj.get("id"),
-            "deprecatedRef": DeprecatedObject.from_dict(obj["deprecatedRef"]) if obj.get("deprecatedRef") is not None else None,
-            "bars": obj.get("bars")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

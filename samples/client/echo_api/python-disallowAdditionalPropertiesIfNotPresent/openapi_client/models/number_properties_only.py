@@ -70,7 +70,7 @@ class NumberPropertiesOnly(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -88,11 +88,7 @@ class NumberPropertiesOnly(BaseModel):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in NumberPropertiesOnly) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "number": obj.get("number"),
-            "float": obj.get("float"),
-            "double": obj.get("double")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

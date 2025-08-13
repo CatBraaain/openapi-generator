@@ -67,11 +67,8 @@ class CircularReferenceModel(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of nested
-        if self.nested:
-            _dict['nested'] = self.nested.to_dict()
         return _dict
 
     @classmethod
@@ -83,10 +80,7 @@ class CircularReferenceModel(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "size": obj.get("size"),
-            "nested": FirstRef.from_dict(obj["nested"]) if obj.get("nested") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 from petstore_api.models.first_ref import FirstRef

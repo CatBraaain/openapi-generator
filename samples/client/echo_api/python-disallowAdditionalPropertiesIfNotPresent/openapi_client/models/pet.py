@@ -84,18 +84,8 @@ class Pet(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of category
-        if self.category:
-            _dict['category'] = self.category.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of each item in tags (list)
-        _items = []
-        if self.tags:
-            for _item_tags in self.tags:
-                if _item_tags:
-                    _items.append(_item_tags.to_dict())
-            _dict['tags'] = _items
         return _dict
 
     @classmethod
@@ -112,14 +102,7 @@ class Pet(BaseModel):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in Pet) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "category": Category.from_dict(obj["category"]) if obj.get("category") is not None else None,
-            "photoUrls": obj.get("photoUrls"),
-            "tags": [Tag.from_dict(_item) for _item in obj["tags"]] if obj.get("tags") is not None else None,
-            "status": obj.get("status")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

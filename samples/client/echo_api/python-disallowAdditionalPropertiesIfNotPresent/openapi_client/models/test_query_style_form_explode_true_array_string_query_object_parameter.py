@@ -67,7 +67,7 @@ class TestQueryStyleFormExplodeTrueArrayStringQueryObjectParameter(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -85,9 +85,7 @@ class TestQueryStyleFormExplodeTrueArrayStringQueryObjectParameter(BaseModel):
             if _key not in cls.__properties:
                 raise ValueError("Error due to additional fields (not defined in TestQueryStyleFormExplodeTrueArrayStringQueryObjectParameter) in the input: " + _key)
 
-        _obj = cls.model_validate({
-            "values": obj.get("values")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

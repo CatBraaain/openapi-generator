@@ -67,11 +67,8 @@ class FooGetDefaultResponse(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of string
-        if self.string:
-            _dict['string'] = self.string.to_dict()
         return _dict
 
     @classmethod
@@ -83,9 +80,7 @@ class FooGetDefaultResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "string": Foo.from_dict(obj["string"]) if obj.get("string") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

@@ -70,17 +70,8 @@ class ArrayOfArrayOfModel(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in another_property (list of list)
-        _items = []
-        if self.another_property:
-            for _item_another_property in self.another_property:
-                if _item_another_property:
-                    _items.append(
-                         [_inner_item.to_dict() for _inner_item in _item_another_property if _inner_item is not None]
-                    )
-            _dict['another_property'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -97,12 +88,7 @@ class ArrayOfArrayOfModel(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "another_property": [
-                    [Tag.from_dict(_inner_item) for _inner_item in _item]
-                    for _item in obj["another_property"]
-                ] if obj.get("another_property") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

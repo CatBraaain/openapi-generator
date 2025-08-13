@@ -67,11 +67,8 @@ class Info(BaseDiscriminator):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of val
-        if self.val:
-            _dict['val'] = self.val.to_dict()
         return _dict
 
     @classmethod
@@ -83,10 +80,7 @@ class Info(BaseDiscriminator):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "_typeName": obj.get("_typeName"),
-            "val": BaseDiscriminator.from_dict(obj["val"]) if obj.get("val") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

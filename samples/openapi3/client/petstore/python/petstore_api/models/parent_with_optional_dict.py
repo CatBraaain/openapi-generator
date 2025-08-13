@@ -70,15 +70,8 @@ class ParentWithOptionalDict(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each value in optional_dict (dict)
-        _field_dict = {}
-        if self.optional_dict:
-            for _key_optional_dict in self.optional_dict:
-                if self.optional_dict[_key_optional_dict]:
-                    _field_dict[_key_optional_dict] = self.optional_dict[_key_optional_dict].to_dict()
-            _dict['optionalDict'] = _field_dict
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -95,14 +88,7 @@ class ParentWithOptionalDict(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "optionalDict": dict(
-                (_k, InnerDictWithProperty.from_dict(_v))
-                for _k, _v in obj["optionalDict"].items()
-            )
-            if obj.get("optionalDict") is not None
-            else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

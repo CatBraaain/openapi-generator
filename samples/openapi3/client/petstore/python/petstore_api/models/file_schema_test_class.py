@@ -71,18 +71,8 @@ class FileSchemaTestClass(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of file
-        if self.file:
-            _dict['file'] = self.file.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of each item in files (list)
-        _items = []
-        if self.files:
-            for _item_files in self.files:
-                if _item_files:
-                    _items.append(_item_files.to_dict())
-            _dict['files'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -99,10 +89,7 @@ class FileSchemaTestClass(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "file": File.from_dict(obj["file"]) if obj.get("file") is not None else None,
-            "files": [File.from_dict(_item) for _item in obj["files"]] if obj.get("files") is not None else None
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

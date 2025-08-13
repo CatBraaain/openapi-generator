@@ -154,17 +154,12 @@ class EnumTest(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if outer_enum (nullable) is None
-        # and model_fields_set contains the field
-        if self.outer_enum is None and "outer_enum" in self.model_fields_set:
-            _dict['outerEnum'] = None
 
         return _dict
 
@@ -177,21 +172,7 @@ class EnumTest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "enum_string": obj.get("enum_string"),
-            "enum_string_required": obj.get("enum_string_required"),
-            "enum_integer_default": obj.get("enum_integer_default") if obj.get("enum_integer_default") is not None else 5,
-            "enum_integer": obj.get("enum_integer"),
-            "enum_number": obj.get("enum_number"),
-            "enum_string_single_member": obj.get("enum_string_single_member"),
-            "enum_integer_single_member": obj.get("enum_integer_single_member"),
-            "outerEnum": obj.get("outerEnum"),
-            "outerEnumInteger": obj.get("outerEnumInteger"),
-            "outerEnumDefaultValue": obj.get("outerEnumDefaultValue") if obj.get("outerEnumDefaultValue") is not None else OuterEnumDefaultValue.PLACED,
-            "outerEnumIntegerDefaultValue": obj.get("outerEnumIntegerDefaultValue") if obj.get("outerEnumIntegerDefaultValue") is not None else OuterEnumIntegerDefaultValue.NUMBER_0,
-            "enumNumberVendorExt": obj.get("enumNumberVendorExt"),
-            "enumStringVendorExt": obj.get("enumStringVendorExt")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

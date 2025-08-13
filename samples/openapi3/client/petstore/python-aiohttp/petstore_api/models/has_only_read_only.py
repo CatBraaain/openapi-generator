@@ -71,7 +71,7 @@ class HasOnlyReadOnly(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -84,10 +84,7 @@ class HasOnlyReadOnly(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "bar": obj.get("bar"),
-            "foo": obj.get("foo")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

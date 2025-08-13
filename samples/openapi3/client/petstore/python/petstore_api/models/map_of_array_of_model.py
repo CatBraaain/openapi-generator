@@ -70,17 +70,8 @@ class MapOfArrayOfModel(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each value in shop_id_to_org_online_lip_map (dict of array)
-        _field_dict_of_array = {}
-        if self.shop_id_to_org_online_lip_map:
-            for _key_shop_id_to_org_online_lip_map in self.shop_id_to_org_online_lip_map:
-                if self.shop_id_to_org_online_lip_map[_key_shop_id_to_org_online_lip_map] is not None:
-                    _field_dict_of_array[_key_shop_id_to_org_online_lip_map] = [
-                        _item.to_dict() for _item in self.shop_id_to_org_online_lip_map[_key_shop_id_to_org_online_lip_map]
-                    ]
-            _dict['shopIdToOrgOnlineLipMap'] = _field_dict_of_array
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -97,16 +88,7 @@ class MapOfArrayOfModel(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "shopIdToOrgOnlineLipMap": dict(
-                (_k,
-                        [Tag.from_dict(_item) for _item in _v]
-                        if _v is not None
-                        else None
-                )
-                for _k, _v in obj.get("shopIdToOrgOnlineLipMap", {}).items()
-            )
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:

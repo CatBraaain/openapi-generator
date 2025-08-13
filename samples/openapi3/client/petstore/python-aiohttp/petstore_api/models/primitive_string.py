@@ -67,7 +67,7 @@ class PrimitiveString(BaseDiscriminator):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 
@@ -80,10 +80,7 @@ class PrimitiveString(BaseDiscriminator):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "_typeName": obj.get("_typeName"),
-            "_value": obj.get("_value")
-        })
+        _obj = cls.model_validate(obj)
         return _obj
 
 

@@ -69,17 +69,12 @@ class HealthCheckResult(BaseModel):
         _dict = self.model_dump(
             by_alias=True,
             exclude=excluded_fields,
-            exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if nullable_message (nullable) is None
-        # and model_fields_set contains the field
-        if self.nullable_message is None and "nullable_message" in self.model_fields_set:
-            _dict['NullableMessage'] = None
 
         return _dict
 
@@ -92,9 +87,7 @@ class HealthCheckResult(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "NullableMessage": obj.get("NullableMessage")
-        })
+        _obj = cls.model_validate(obj)
         # store additional fields in additional_properties
         for _key in obj.keys():
             if _key not in cls.__properties:
