@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug OpenAPIGenerator - python-echo-api",
+      "request": "launch",
+      "mainClass": "org.openapitools.codegen.OpenAPIGenerator",
+      "classPaths": [
+        "${workspaceFolder}/modules/openapi-generator-cli/target/openapi-generator-cli.jar"
+      ],
+      "args": "generate -c ${workspaceFolder}/bin/configs/python-echo-api.yaml",
+      "vmArgs": "-ea -server -Duser.timezone=UTC",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
